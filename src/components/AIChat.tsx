@@ -41,12 +41,12 @@ const AIChat = ({ onClose }: AIChatProps) => {
 
     try {
       const CHAT_URL = `${import.meta.env.VITE_SUPABASE_URL}/functions/v1/ai-chat`;
-      
+
       const response = await fetch(CHAT_URL, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_PUBLISHABLE_KEY}`,
+          'Authorization': `Bearer ${import.meta.env.VITE_SUPABASE_ANON_KEY}`,
         },
         body: JSON.stringify({
           messages: [...messages, userMessage],
@@ -54,7 +54,10 @@ const AIChat = ({ onClose }: AIChatProps) => {
         }),
       });
 
-      if (!response.ok) throw new Error('Failed to get response');
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
+      }
 
       const reader = response.body?.getReader();
       const decoder = new TextDecoder();
@@ -108,7 +111,17 @@ const AIChat = ({ onClose }: AIChatProps) => {
       }
     } catch (error) {
       console.error('Chat error:', error);
-      toast.error('Failed to get AI response');
+      const errorMessage = error instanceof Error ? error.message : 'Failed to get AI response';
+      toast.error(errorMessage);
+
+      setMessages(prev => {
+        const newMessages = [...prev];
+        newMessages.push({
+          role: 'assistant',
+          content: `Error: ${errorMessage}. Please check your API configuration or try again.`
+        });
+        return newMessages;
+      });
     } finally {
       setIsLoading(false);
     }
