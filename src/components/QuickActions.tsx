@@ -7,10 +7,10 @@ interface QuickActionsProps {
 
 const QuickActions = ({ onActionClick }: QuickActionsProps) => {
   const actions = [
-    { id: 'editor', label: 'Editor', icon: Code2, color: 'text-primary' },
-    { id: 'chat', label: 'AI Chat', icon: MessageSquare, color: 'text-accent' },
-    { id: 'templates', label: 'Templates', icon: FileCode, color: 'text-code-function' },
-    { id: 'terminal', label: 'Terminal', icon: Terminal, color: 'text-code-string' },
+    { id: 'editor', label: 'Web Editor', icon: Code2, color: 'text-primary', description: 'HTML/CSS/JS with live preview' },
+    { id: 'chat', label: 'AI Chat', icon: MessageSquare, color: 'text-accent', description: 'Code assistance & help' },
+    { id: 'templates', label: 'Templates', icon: FileCode, color: 'text-code-function', description: 'Ready-to-use code snippets' },
+    { id: 'terminal', label: 'Terminal', icon: Terminal, color: 'text-code-string', description: 'Command line interface' },
   ];
 
   return (
@@ -33,10 +33,11 @@ const QuickActions = ({ onActionClick }: QuickActionsProps) => {
             key={action.id}
             onClick={() => onActionClick(action.id)}
             variant="outline"
-            className="h-24 flex-col gap-2 hover:bg-secondary/50 hover:border-primary/50 transition-all"
+            className="h-32 flex-col gap-2 hover:bg-secondary/50 hover:border-primary/50 transition-all text-left p-4"
           >
-            <action.icon className={`w-6 h-6 ${action.color}`} />
-            <span className="text-sm font-medium">{action.label}</span>
+            <action.icon className={`w-7 h-7 ${action.color} mb-1`} />
+            <span className="text-sm font-semibold">{action.label}</span>
+            <span className="text-xs text-muted-foreground">{action.description}</span>
           </Button>
         ))}
       </div>
@@ -44,13 +45,13 @@ const QuickActions = ({ onActionClick }: QuickActionsProps) => {
       <div className="mt-8 p-4 rounded-lg bg-gradient-to-br from-primary/10 to-accent/10 border border-primary/20">
         <h3 className="text-sm font-semibold mb-2 text-foreground flex items-center gap-2">
           <Sparkles className="w-4 h-4 text-primary" />
-          AI Features
+          Features
         </h3>
         <ul className="text-xs text-muted-foreground space-y-1">
-          <li>• Code completion & suggestions</li>
-          <li>• Real-time error detection</li>
-          <li>• Multi-language support</li>
-          <li>• Smart code formatting</li>
+          <li>• Live HTML/CSS/JS preview</li>
+          <li>• AI-powered code assistance</li>
+          <li>• Interactive terminal</li>
+          <li>• Ready-to-use templates</li>
         </ul>
       </div>
     </div>
